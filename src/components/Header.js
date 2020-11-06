@@ -15,8 +15,7 @@ const Header = ({shows, popUp, trackHandle}) => {
 		  }
 		  return comparison;
 		}
-			console.log(shows.sort(compare))
-
+			
 
  	const showList = shows.length ? (
 	 Array.from(shows.slice(237,240)).map(show => {
