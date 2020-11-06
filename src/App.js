@@ -20,7 +20,7 @@ class App extends Component {
 	}
 
 	componentDidMount(){
-		axios.get('http://api.tvmaze.com/shows')
+		axios.get('/shows')
 		.then(res => {
 			//console.log(res);
 			this.setState({
