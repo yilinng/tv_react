@@ -4,10 +4,14 @@ import React from 'react'
 const Header = ({shows, popUp, trackHandle}) => {
 
 	//Sorting an array of objects by property values
-	const showFiltered = shows.sort((a, b) => parseFloat(a.rating.average) - parseFloat(b.rating.average));
+	//const showFiltered = shows.sort((a, b) => parseFloat(a.rating.average) - parseFloat(b.rating.average));
+	let byRating = shows.slice(0);
+	byRating.sort(function(a, b){
+		return a.rating.average - b.rating.average
+	});
 
- 	const showList = showFiltered.slice(237,240).length ? (
-	 Array.from(showFiltered.slice(237,240)).map(show => {
+ 	const showList = byRating.slice(237,240).length ? (
+	 Array.from(byRating.slice(237,240)).map(show => {
 	 	return(
 			<div className="header my-4 bg-gray-400 bg-opacity-50 hover:bg-opacity-25 flex justify-evenly" key={show.id}>
 				<div className="leftpage m-auto xl:m-10">
