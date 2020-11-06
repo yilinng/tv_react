@@ -5,11 +5,11 @@ const Header = ({shows, popUp, trackHandle}) => {
 
 	//Sorting an array of objects by property values
 	//const showFiltered = shows.sort((a, b) => parseFloat(a.rating.average) - parseFloat(b.rating.average));
-	//const byRating  = shows.sort(function(a,b) {return (a.rating.average >b.rating.average) ? 1 : ((b.rating.average >a.rating.average) ? -1 : 0);} );
-	const byRating =  Array.prototype.sort.call(shows, function (a, b) {
-	  return a.rating.average - b.rating.average;
-	});
- 	const showList = byRating.slice(237,240).length ? (
+	const byRating  = shows.sort(function(a,b) {return (a.rating.average >b.rating.average) ? 1 : ((b.rating.average >a.rating.average) ? -1 : 0);} );
+	//const byRating =  Array.prototype.sort.call(shows, function (a, b) {
+	//  return a.rating.average - b.rating.average;
+	//});
+ 	const showList = byRating.length ? (
 	 Array.from(byRating.slice(237,240)).map(show => {
 	 	return(
 			<div className="header my-4 bg-gray-400 bg-opacity-50 hover:bg-opacity-25 flex justify-evenly" key={show.id}>
