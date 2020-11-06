@@ -2,7 +2,12 @@ import React from 'react'
 
 
 const Header = ({shows, popUp, trackHandle}) => {
-
+	//Sorting an array of objects by property values
+	
+	shows.sort(function(a, b) {
+		return a.rating.average - b.rating.average
+	});
+		
 
  	const showList = shows.length ? (
 	 Array.from(shows.slice(237,240)).map(show => {
