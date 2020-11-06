@@ -2,7 +2,7 @@ import React from 'react'
 
 
 const Header = ({shows, popUp, trackHandle}) => {
-	shows.sort((a, b) => a.rating.average.localeCompare(b.rating.average));
+		shows.sort((a, b) => (a.rating.average > b.rating.average ) ? 1 : -1)
 
  	const showList = shows.length ? (
 	 Array.from(shows.slice(237,240)).map(show => {
