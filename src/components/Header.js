@@ -3,13 +3,15 @@ import React from 'react'
 
 const Header = ({shows, popUp, trackHandle}) => {
 
-	const byRating = shows.sort((a, b) => {
-	  return a.rating.average - b.rating.average;
-	});
+	//const byRating = shows.sort((a, b) => {
+	//  return a.rating.average - b.rating.average;
+	//});
+	shows.sort((a, b) => Number(a.rating.average)-Number(b.rating.average));	
+
 	//console.log(byRating, byRating.slice(237,240))
 
- 	const showList = byRating.length ? (
-	 Array.from(byRating.slice(237,240)).map(show => {
+ 	const showList = shows.length ? (
+	 Array.from(shows.slice(237,240)).map(show => {
 	 	return(
 			<div className="header my-4 bg-gray-400 bg-opacity-50 hover:bg-opacity-25 flex justify-evenly" key={show.id}>
 				<div className="leftpage m-auto xl:m-10">
