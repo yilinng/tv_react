@@ -3,11 +3,20 @@ import React from 'react'
 
 const Header = ({shows, popUp, trackHandle}) => {
 	//Sorting an array of objects by property values
-	
-	shows.sort(function(a, b) {
-		return a.rating.average - b.rating.average
-	});
-		
+	function compare(a, b) {
+		  const bandA = a.rating.average;
+		  const bandB = b.rating.average;
+
+		  let comparison = 0;
+		  if (bandA > bandB) {
+		    comparison = 1;
+		  } else if (bandA < bandB) {
+		    comparison = -1;
+		  }
+		  return comparison;
+		}
+			console.log(shows.sort(compare))
+
 
  	const showList = shows.length ? (
 	 Array.from(shows.slice(237,240)).map(show => {
