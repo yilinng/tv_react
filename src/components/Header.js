@@ -5,10 +5,7 @@ const Header = ({shows, popUp, trackHandle}) => {
 
 	//Sorting an array of objects by property values
 	//const showFiltered = shows.sort((a, b) => parseFloat(a.rating.average) - parseFloat(b.rating.average));
-	let byRating = shows.slice(0);
-	byRating.sort(function(a, b){
-		return a.rating.average - b.rating.average
-	});
+	const byRating  = shows.sort(function(a,b) {return (a.rating.average >b.rating.average) ? 1 : ((b.rating.average >a.rating.average) ? -1 : 0);} );
 
  	const showList = byRating.slice(237,240).length ? (
 	 Array.from(byRating.slice(237,240)).map(show => {
