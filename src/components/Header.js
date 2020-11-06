@@ -3,7 +3,7 @@ import React from 'react'
 
 const Header = ({shows, popUp, trackHandle}) => {
 
-	const byRating = Array.prototype.sort.call(shows, function (a, b) {
+	const byRating = shows.sort((a, b) => {
 	  return a.rating.average - b.rating.average;
 	});
 	//console.log(byRating, byRating.slice(237,240))
