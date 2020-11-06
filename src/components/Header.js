@@ -6,7 +6,10 @@ const Header = ({shows, popUp, trackHandle}) => {
 	//const byRating = shows.sort((a, b) => {
 	//  return a.rating.average - b.rating.average;
 	//});
-	shows.sort((a, b) => Number(a.rating.average)-Number(b.rating.average));	
+	shows.sort(function(a, b) {
+		return a.rating.average - b.rating.average
+	});	
+	
 
 	//console.log(byRating, byRating.slice(237,240))
 
