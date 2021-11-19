@@ -1,50 +1,99 @@
-import React from 'react'
-
+import React, { useRef, useCallback } from 'react'
+import { useNavigate } from "react-router-dom";
+import turnleft from '../images/turnleft.svg';
+import turnright from '../images/turnright.svg';
 
 const Header = ({shows, popUp, trackHandle}) => {
-		shows.sort((a, b) => (a.rating.average > b.rating.average ) ? 1 : -1)
+	//shows.sort((a, b) => (a.rating.average > b.rating.average ) ? 1 : -1)
+	const scrollRef = useRef(null);
+	const navigate = useNavigate();
+	const filterByType = Array.from(new Set(shows.map(item => item.type)))
+	//['Scripted', 'Reality', 'Animation', 'Talk Show', 'Documentary']
+	const countType = {}
+	//initial count is 0
+	filterByType.map(item => countType[item] = 0)
+	Array.from(shows.map(item => countType[item.type] += 1))
+	/*
+	{
+	Animation: 14
+	Documentary: 1
+	Reality: 10
+	Scripted: 212
+	Talk Show: 3}
+	*/
 
- 	const showList = shows.length ? (
-	 Array.from(shows.slice(237,240)).map(show => {
-	 	return(
-			<div className="header my-4 bg-gray-400 bg-opacity-50 hover:bg-opacity-25 flex justify-evenly" key={show.id}>
-				<div className="leftpage m-auto xl:m-10">
-				<span className="font-semibold text-gray-200 text-2xl cursor-default">{show.name}</span>
-				<div className="flex justify-evenly mt-auto xl:mt-10">
-				  <button className="bg-pink-300 hover:bg-pink-500 text-gray-800 font-bold py-2 px-4 rounded-full"
-				  onClick={() => {popUp(show.id)}}>
-				    Detail
-				  </button>
-				  <button className="bg-yellow-300 hover:bg-yellow-500 text-gray-800 font-bold py-2 px-4 rounded-full">
-				    Hot!
-				  </button>
-				  <span className="bg-red-500 text-white font-bold py-2 px-4 rounded-full">{show.rating.average}</span>
-				</div>
-			</div>
-			<div className="rightpage my-auto">
-				<img className="z-0 w-auto xl:w-40 h-auto xl:h-40" src={show.image.medium} alt={show.name}/>
-			</div>
-			</div>
-		)
- 	})	
+	const handleToDetail = (id) => {
+		//redirect to detail page	
+		navigate('/' + id)
+	}
 
- 	):( <div className="center">No posts to show</div>);
+	const handleScrollNext = useCallback((node) => {
+		
+		if (node.target.nodeName === 'BUTTON') {
+			let list = node.target.previousSibling || [];
+			//console.log(list.scrollLeft);
+			
+			list.scrollLeft += 800;
+			scrollRef.current = list;
+			
+		}
+		
+	},[])
 
+	const handleScrollPre = useCallback((node) => {
+		
+		if (node.target.nodeName === 'BUTTON') {
+			let list = node.target.nextElementSibling || [];
+			//console.log(list.scrollLeft);
+			
+			list.scrollLeft -= 800;
+			scrollRef.current = list;
+			
+ 
+		}
+	
+	},[])
+
+	const setRef = useCallback((node) => {
+		if (node) {
+			node.scrollLeft = 245;
+		}
+		scrollRef.current = node;
+	             
+	 },[]) 
+	
+	
  	return (
- 		<div className="header-list">
- 		<div className="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md" role="alert">
-		  <div className="flex">
-		    <div className="py-1"><svg className="fill-current h-6 w-6 text-teal-500 mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z"/></svg></div>
-		    <div className="flex justify-evenly">
-		      <p className="font-bold">Top three rating!!</p>
-		      <button className="absolute right-0 mx-40 bg-purple-500 text-white font-bold" onClick={() => {trackHandle()}}>TrackList</button>
-		    </div>
-		  </div>
-		</div>
- 			<div className="flex flex-col xl:flex-row-reverse">
- 			{showList}
- 			</div>
- 		</div>
+ 		<header className="main mt-60 mx-auto xl:-mx-2 w-full py-40 px-10 text-white">
+			<h1 className="heading capitalize font-black text-5xl">movies</h1>
+        	<p className="info w-auto xl:w-1/3 text-lg mt-6 mb-32 text-left">
+				Movies move us like nothing else can, whether they're scary, funny, dramatic, 
+				romantic or anywhere in-between. So many titles, so much to experience.</p>
+				{ filterByType.length && filterByType.map((item, index) => 
+				<div key={index}>	
+					<h1 className="movie-category text-lg font-medium mb-10 ml-6 capitalize">{item}</h1>
+					<div className="movie-list relative flex items-center my-10 xl:my-20">
+						<button className="pre-btn" onClick={handleScrollPre}>
+							<img src={turnleft} alt="pre-btn"/>	
+						</button>
+						<div ref={setRef} className="movie-container">
+							{ item && Array.from(shows.map(it => it.type === item ? (
+								<div className="movie w-auto xl:w-72 flex-none items-center opacity-50 hover:opacity-100" key={it.id} onClick={() => handleToDetail(it.id)}>
+									<img className="movie-image transform" src={it.image.medium} alt={it.name}/>
+									<p className="movie-title capitalize h-12 overflow-hidden text-center">{it.name}</p>
+								</div>	
+							): ('')	 
+							))}
+						</div>
+						<button className="nxt-btn" onClick={handleScrollNext}>
+							<img src={turnright} alt="nxt-btn"/>		
+						</button>
+					</div>
+				</div>
+				)
+			}
+				
+ 		</header>
  	)
 	
 }

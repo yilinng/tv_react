@@ -1,56 +1,85 @@
-import React from 'react';
-import iconRemove from '../images/icon-remove.svg';
+import React, { useState, useEffect } from 'react';
+//import iconRemove from '../images/icon-remove.svg';
 import star from '../images/star.svg';
+import { useParams, useNavigate } from "react-router-dom";
+import axios from 'axios';
 
 
-const ModalDetails = ({show, closeDetail, trackitem}) => {
+const ModalDetails = ({shows}) =>{
 
+	const navigate = useNavigate();
+	const params = useParams();
+	const [show, setShow] = useState('')
 
-const summary = () => {
-	let getHtml = show[0].summary;
-	let div =  document.createElement("div");
-	div.innerHTML = getHtml;
-	return div.innerText;
-}
+	let filterArr = [];
+	const objFilter = new Map();
 
-const detail = show.length ? (
- 		<div className="absolute top-0 mx-auto xl:mx-40 my-auto xl:my-20 h-auto z-20 flex flex-col xl:flex-row bg-white rounded-lg">
- 			<div className="leftpage flex flex-col bg-gray-200 w-auto xl:w-1/2 rounded-lg">
- 			<span className="text-4xl text-center my-10">{show[0].name}</span>
- 			<p className="text-lg text-justify font-serif leading-loose px-4">{summary()}</p>
- 			<div className="flex justify-evenly mt-10">
-	 			<button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
-				 {show[0].genres[0]}
-				</button>
-				{show[0].genres[1] ?(
-					<button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
-					  {show[0].genres[1]}
-					</button>):('')}
-				{show[0].genres[2] ?(
-					<button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
-					  {show[0].genres[2]}
-					</button>):('')}
-			</div>
-			<div className="flex justify-evenly mt-10">
-				<span className="bg-red-300 text-white text-2xl rounded-full py-2 px-4">{show[0].rating.average}</span>
+	if(shows.length > 0){
+		Array.from(shows).map(item =>{
+			if(item.genres.length){
+				item.genres.map(inItem => !show.genres ? '' : !show.genres.includes(inItem) || item.id === show.id ? '': filterArr.push(item))
+			}
+			return null
+		}) 
+	}
 
-				<button className="btnTrack bg-blue-200 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center" onClick={() => {trackitem(show[0].id, show[0])}}>
-				<img src={star} alt="star"/>
-				  <span className="trackName">Track</span>
-				</button>
-			</div>
- 			</div>
- 			<div className="rightpage w-auto xl:w-1/2 rounded-lg">
- 				<img className="absolute top-0 right-0 z-30 w-12 h-12" src={iconRemove} alt="iconRemove" onClick={() =>{closeDetail()}}/>
- 				<img className="w-auto h-auto" src={show[0].image.original} alt={show[0].name}/>
- 			</div>
- 		</div>
- 	) : ('');
+	if(filterArr.length){
+		filterArr.map(item => objFilter.set(item.id, item));	
+	} 
+	//console.log(objFilter);
+
+	/*
+	for (let role of objFilter.values()) {
+		console.log(role);
+	}
+	*/
+	// recommend list
+	const collectShow = [...objFilter.values()].map((item, index) => index > 15 ? '':  
+	<div className="movie w-auto xl:w-72 flex-none cursor-pointer" key={item.id} onClick={() => navigate('/' + item.id)}>
+	<img className="w-48 h-auto" src={!item.image ? '' : !item.image.medium ? '' : item.image.medium} alt={item.name} />
+	</div>)
+
+	useEffect(() => {
+		const fetchData = () => {
+			axios.get('/shows/' + params.id)
+			.then(res => {
+				//console.log(res);
+				setShow(res.data);
+			})
+		}
+		fetchData();
+	},[params.id])
  	
  	return (
- 		<div className="showdetail">
- 			{detail}
- 		</div>
+		 <div className="detailpage">
+			 {!show ? <h3 className="text-white">no post</h3> :
+			<>
+			<div className="movie-info" style={{backgroundImage: "url(" + show.image.original + ")"}}>
+				<div className="movie-detail">
+					<h1 className="movie-name text-2xl font-medium mb-6">{show.name}</h1>
+					<span className="genresList">
+					{ !show.genres ? '': show.genres.length ? show.genres.map((item, index) => <p className="genres text-gray-300" key={index}>{ item }</p> ): ''}
+					</span>
+					<p className="des">{ !show.summary ? '' : show.summary.replace(/<p>|<\/p>|<b>|<\/b>/g, "")}</p>
+					<p className="starring text-gray-300 flex flex-row space-x-4">
+						<img className="bg-white" src={ star } width="50" height="50" alt="star"/> 
+						<span className="text-3xl">{!show.rating ? '': !show.rating.average ? '':show.rating.average}</span>
+					</p>
+				</div>
+			</div>
+			<div className="mobileDes">
+					<p className="des">{ !show.summary ? '' : show.summary.replace(/<p>|<\/p>|<b>|<\/b>/g, "")}</p>
+			</div>
+
+			<div className="recommendations w-6/7 mx-16">
+				<h1 className="heading text-3xl text-white my-10">More Like This</h1>
+				<div className="recommendations-container w-full flex flex-wrap space-x-2 space-y-2">
+					{ collectShow }			
+				</div>
+			</div>
+			</>
+			}
+		</div>  
  	)
  
 }
