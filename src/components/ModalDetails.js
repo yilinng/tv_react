@@ -43,7 +43,7 @@ const ModalDetails = ({ shows }) =>{
 
 	useEffect(() => {
 		const fetchData = () => {
-			axios.get('/shows/' + params.id)
+			axios.get(process.env.REACT_APP_NOT_SECRET_CODE + '/shows/' + params.id)
 			.then(res => {
 				//console.log(res);
 				setShow(res.data);

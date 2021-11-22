@@ -26,14 +26,13 @@ class App extends Component {
 		this.setState({
 			loading: true
 		})
-		axios.get('/shows')
+		axios.get(process.env.REACT_APP_NOT_SECRET_CODE + '/shows')
 		.then(res => {
-			console.log(res);
 			this.setState({
           	shows: res.data,
 			loading: false  
        		 });
-		}).catch(function (error) {
+		}).catch(error => {
 			// handle error
 			this.setState({
 				error: error
