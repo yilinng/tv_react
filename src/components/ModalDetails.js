@@ -5,7 +5,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from 'axios';
 
 
-const ModalDetails = ({shows}) =>{
+const ModalDetails = ({ shows }) =>{
 
 	const navigate = useNavigate();
 	const params = useParams();
@@ -38,6 +38,8 @@ const ModalDetails = ({shows}) =>{
 	<div className="movie w-auto xl:w-72 flex-none cursor-pointer" key={item.id} onClick={() => navigate('/' + item.id)}>
 	<img className="w-48 h-auto" src={!item.image ? '' : !item.image.medium ? '' : item.image.medium} alt={item.name} />
 	</div>)
+
+	
 
 	useEffect(() => {
 		const fetchData = () => {

@@ -3,17 +3,29 @@ import { useNavigate } from "react-router-dom";
 import turnleft from '../images/turnleft.svg';
 import turnright from '../images/turnright.svg';
 
-const Header = ({shows, popUp, trackHandle}) => {
+const Header = ({ shows, error }) => {
 	//shows.sort((a, b) => (a.rating.average > b.rating.average ) ? 1 : -1)
 	const scrollRef = useRef(null);
 	const navigate = useNavigate();
-	//console.log(Object.keys(shows).length === 0)
-	const filterByType = Object.keys(shows).length !== 0 ? Array.from(new Set(shows.map(item => item.type))): []
-	//['Scripted', 'Reality', 'Animation', 'Talk Show', 'Documentary']
+
+	const filterByType =  error ? []: Array.from(new Set(shows.map(item => item.type)));
+
+	//{'Scripted', 'Reality', 'Animation', 'Talk Show', 'Documentary'}
 	const countType = {}
 	//initial count is 0
-	filterByType.map(item => countType[item] = 0)
-	Array.from(shows.map(item => countType[item.type] += 1))
+	
+	if(filterByType.length){
+		filterByType.map(item => countType[item] = 0)
+	}
+	//test for an empty JavaScript object?
+	function isEmpty(obj) {
+		return Object.keys(obj).length === 0;
+	}
+	
+	if(isEmpty(shows)){
+		Array.from(shows.map(item => countType[item.type] += 1))
+	}
+
 	/*
 	{
 	Animation: 14

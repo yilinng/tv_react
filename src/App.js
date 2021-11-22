@@ -18,7 +18,8 @@ class App extends Component {
 		show:[],
 		filterPosts:[],
 		localTrack:[],
-		loading: false
+		loading: false,
+		error:''
 	}
 
 	componentDidMount(){
@@ -27,27 +28,16 @@ class App extends Component {
 		})
 		axios.get('/shows')
 		.then(res => {
-			//console.log(res);
+			console.log(res);
 			this.setState({
           	shows: res.data,
 			loading: false  
        		 });
-		})
-	}
-
-	popUp = (id) => {
-		let shows = this.state.shows.filter(show => {
-     	 return show.id === id
-   		 });
-		    //console.log(shows)
-		    this.setState({
-		    	show:shows
-		    })
-	}
-
-	closeDetail = () => {
-		this.setState({
-			show: []
+		}).catch(function (error) {
+			// handle error
+			this.setState({
+				error: error
+			})
 		})
 	}
 
@@ -103,7 +93,7 @@ class App extends Component {
       <Navbar serachPost={this.serachPost}/>
 	  <Routes>
 		  <Route path="/" element={ this.state.filterPosts.length ? 
-		  	<FilterPost filterPosts={this.state.filterPosts}/> :<Header shows={this.state.shows}/>}/>
+		  	<FilterPost filterPosts={this.state.filterPosts}/> :<Header shows={this.state.shows} error={this.state.error}/>}/>
 		  <Route path=":id" element={<ModalDetails shows={this.state.shows}/>}/>
 		  <Route path="*" element={<NotFound />} />
 	  </Routes>
