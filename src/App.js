@@ -28,7 +28,6 @@ class App extends Component {
 		})
 		axios.get('/shows')
 		.then(res => {
-			console.log(res);
 			this.setState({
           		shows: res.data,
 			loading: false  
