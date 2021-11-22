@@ -8,7 +8,7 @@ const Header = ({shows, popUp, trackHandle}) => {
 	const scrollRef = useRef(null);
 	const navigate = useNavigate();
 	//console.log(Object.keys(shows).length === 0)
-	const filterByType = Object.keys(shows).length !== 0 ? Array.from(new Set(shows.map(item => item.type))): []
+	const filterByType = Array.from(new Set(shows.map(item => item.type)));
 	//['Scripted', 'Reality', 'Animation', 'Talk Show', 'Documentary']
 	const countType = {}
 	//initial count is 0
