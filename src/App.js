@@ -30,13 +30,13 @@ class App extends Component {
 		.then(res => {
 			console.log(res);
 			this.setState({
-          	shows: res.data,
+          		shows: res.data,
 			loading: false  
-       		 });
-		}).catch(function (error) {
+       			})
+			}).catch(error => {
 			// handle error
 			this.setState({
-				error: error
+			error: error
 			})
 		})
 	}
